@@ -1,0 +1,22 @@
+.shopping-list {
+  max-width: 700px;
+  border: 1px solid;
+  background-color: rgb(152, 235, 137);
+  margin: 0 auto;
+  padding: 10px;
+}
+h3 {
+  font-size: 25px;
+  caption-side: top;
+  text-transform: capitalize;
+}
+.form-inline .form-group {
+  display: inline;
+}
+.form-group.mr-2 {
+  margin-right: 0.5rem;
+}
+.advanced-shopping {
+  list-style: none;
+  text-align: left;
+}
