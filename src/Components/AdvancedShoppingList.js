@@ -3,34 +3,48 @@ import "./AdvancedShoppingList.css";
 
 function AdvancedShoppingList({ list, owner }) {
   const [newOne, setNewOne] = useState("");
-  const [newQty, setNewQty] = useState("1");
+  const [newQty, setNewQty] = useState(1);
 
-  const [anilList, setAnilList] = useState(list);
+  const [myList, setMyList] = useState(list);
 
   const addItem = function (event) {
     event.preventDefault();
-    setAnilList(anilList.concat({ name: newOne, qty: newQty }));
-    setNewOne("");
-    setNewQty("1");
+    if (newOne && newQty > 0) {
+      setMyList(myList.concat({ name: newOne, qty: newQty }));
+      setNewOne("");
+      setNewQty(1);
+    } else {
+      if (newOne) {
+        alert("Hey you will have to add some numbers.");
+      } else {
+        alert("You need to add a name of your item!");
+      }
+    }
+  };
+
+  const deleteHandler = function (i) {
+    const tempList = [...myList];
+    tempList.splice(i, 1);
+    setMyList(tempList);
   };
 
   const onNameChange = function (event) {
     setNewOne(event.target.value);
   };
   const onCheckChange = function (event, i) {
-    const tempList = [...anilList];
+    const tempList = [...myList];
     tempList[i].done = event.target.checked;
-    setAnilList(tempList);
+    setMyList(tempList);
   };
   const onQtyChange = function (event) {
-    setNewQty(event.target.value);
+    setNewQty(+event.target.value);
   };
   return (
     <div className="shopping-list">
-      <h3>{owner}</h3>
-      <div className="Addshoppinglist-form">
+      <div className="shopping-list-form">
+        <h3>Shopping List</h3>
         <form className="form-inline" onSubmit={addItem}>
-          <div className="form-group mr-2">
+          <div className="form-group mr-2 name">
             <input
               type="text"
               className="form-control"
@@ -39,7 +53,7 @@ function AdvancedShoppingList({ list, owner }) {
               value={newOne}
             />
           </div>
-          <div className="form-group mr-2">
+          <div className="form-group mr-2 qty">
             <input
               type="number"
               className="form-control qty-field"
@@ -56,28 +70,34 @@ function AdvancedShoppingList({ list, owner }) {
         </form>
       </div>
       <ul className="advanced-shopping">
-        {anilList.map((product, i) => (
+        {myList.map((product, i) => (
           <li>
             <div className="custom-control custom-checkbox">
-              <input
-                type="checkbox"
-                className=" form-check-input"
-                id="customCheck1"
-                checked={product.done}
-                onChange={(event) => {
-                  onCheckChange(event, i);
-                }}
-              />
-              {i}
-              <span
-                style={{
-                  textDecoration: product.done ? "line-through" : "none",
-                  fontWeight: product.important ? "bold" : "normal",
-                }}
-              >
-                <span> {product.name}</span>
-                <span className="quantity">{product.qty}</span>
-              </span>
+              <label htmlFor={"check" + i}>
+                <input
+                  type="checkbox"
+                  className=" form-check-input"
+                  id={"check" + i}
+                  checked={product.done}
+                  onChange={(event) => {
+                    onCheckChange(event, i);
+                  }}
+                />
+                <span
+                  style={{
+                    textDecoration: product.done ? "line-through" : "none",
+                    fontWeight: product.important ? "bold" : "normal",
+                  }}
+                >
+                  <span className="number">
+                    {i + 1} {product.name}
+                  </span>
+                  <span className="quantity"> x {product.qty}</span>
+                </span>
+              </label>
+              <button className="btn-delete" onClick={() => deleteHandler(i)}>
+                Delete
+              </button>
             </div>
           </li>
         ))}
